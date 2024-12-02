@@ -1,14 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 import "./index.css"; //
+import CustomModal from "./CustomModal";
 
-const socket = io("http://192.168.49.2:30001?lang=ar", {
+const socket = io("https://asfour.diaaqassem.com:3001/", {
   transports: ["websocket"],
   cors: {
-    origin: "*",
+    origin: "http://localhost:3000?lang=ar",
     methods: ["GET", "POST"],
   },
 });
+// const socket = io("http://localhost:5001?lang=ar", {
+//   transports: ["websocket"],
+//   cors: {
+//     origin: "http://localhost:3000?lang=ar",
+//     methods: ["GET", "POST"],
+//   },
+// });
 
 const ChatApp = () => {
   const [userId, setUserId] = useState("");
@@ -16,11 +24,33 @@ const ChatApp = () => {
   const [roomName, setRoomName] = useState("");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
+  // setUserId(sessionStorage.getItem("idUser"))
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // const [userId, setUserId] = useState("");
+
+  const openModal = () => {
+    // if (userId)
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCopySuccess = () => {
+    alert("!!تم نسخ كود الروم بنجاح");
+  };
 
   useEffect(() => {
     socket.on("joined_room", (data) => {
       alert(`${data.message || data}`);
       console.log(data);
+      if (data.length > 32) {
+        sessionStorage.setItem("dataRoom", data.split(":")[1].trim());
+        openModal();
+      }
     });
     socket.on("receive_message", (data) => {
       setMessages((prev) => [...prev, data.messageData]);
@@ -56,7 +86,7 @@ const ChatApp = () => {
       return;
     }
     socket.emit("Create_Room", {
-      userID: userId,
+      userID: userId || sessionStorage.getItem("idUser"),
       name: roomName,
     });
   };
@@ -67,14 +97,14 @@ const ChatApp = () => {
       return;
     }
     socket.emit("Join_Room", {
-      userID: userId,
+      userID: userId || sessionStorage.getItem("idUser"),
       roomID: roomId,
     });
   };
 
   const handleLeaveRoom = () => {
     socket.emit("Leave_Room", {
-      userID: userId,
+      userID: userId || sessionStorage.getItem("idUser"),
       roomID: roomId,
     });
   };
@@ -82,7 +112,7 @@ const ChatApp = () => {
   const handleSendMessage = () => {
     if (message.trim()) {
       socket.emit("Send_Message", {
-        userID: userId,
+        userID: userId || sessionStorage.getItem("idUser"),
         roomID: roomId,
         content: message,
         name: roomName,
@@ -91,6 +121,7 @@ const ChatApp = () => {
     }
   };
 
+  // setUserId(sessionStorage.getItem("idUser"))
   return (
     <div className="chat-app">
       <div className="chat-header">
@@ -102,8 +133,13 @@ const ChatApp = () => {
           <input
             type="text"
             placeholder="User ID"
-            value={userId}
-            onChange={(e) => setUserId(e.target.value)}
+            value={sessionStorage.getItem("idUser")}
+            // disabled
+            // readOnly
+            // defaultValue={sessionStorage.getItem("idUser")}
+            onChange={(e) =>
+              setUserId(sessionStorage.getItem("idUser").toString())
+            }
             className="input-field"
           />
           <input
@@ -130,6 +166,17 @@ const ChatApp = () => {
             Leave Room
           </button>
         </div>
+
+        <CustomModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          title="انسخ الروم وشاركها مع اصحابك 🏍"
+          message={`: Room ID قبل ما تشاركها ضفها عندك في خانة  ${sessionStorage.getItem(
+            "dataRoom"
+          )}`}
+          copyText={sessionStorage.getItem("dataRoom")}
+          onCopy={handleCopySuccess}
+        />
 
         <div className="messages-section">
           <h2>Messages</h2>

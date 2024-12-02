@@ -10,6 +10,11 @@ body {
   background: #686868;
 
   background: linear-gradient(10deg, #686868, #ffffff);
+    background: linear-gradient(10deg, #eaeef3, #ffffff);
+}
+
+.chat-body {
+  margin-top: 5%;
 }
 
 code {
@@ -125,6 +130,10 @@ code {
 .chat-header {
   /* background-color: #128c7e; */
   background-color: #000;
+  background-color: #128c7e;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 85%, 50% 100%, 0% 85%);
   width: 100%;
   padding: 20px;
   text-align: center;

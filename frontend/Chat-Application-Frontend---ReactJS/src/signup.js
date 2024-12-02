@@ -17,13 +17,16 @@ const SignUp = () => {
     // }
 
     try {
-      const response = await fetch("http://192.168.49.2:30000/api/auth/signup?lang=ar", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password ,confirmPassword}),
-      });
+      const response = await fetch(
+        "https://asfour.diaaqassem.com:3000/api/auth/signup?lang=ar",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password, confirmPassword }),
+        }
+      );
 
       if (response.ok) {
         // alert("Sign up successful! Please log in.");

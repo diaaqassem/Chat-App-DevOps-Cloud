@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: react-app-deployment
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: react-app
@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: react-app
-        image: diaaqassem1/reactapp:v0.1
+        image: diaaqassem1/reactapp:v1.4
         ports:
         - containerPort: 3000
 

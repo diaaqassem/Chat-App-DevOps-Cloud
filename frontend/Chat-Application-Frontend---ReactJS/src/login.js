@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { useNavigate } from "react-router-dom";
+
 const Login = ({ onLogin }) => {
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -13,7 +15,7 @@ const Login = ({ onLogin }) => {
 
     try {
       const response = await fetch(
-        "http://192.168.49.2:30000/api/auth/logIn?lang=ar",
+        "https://asfour.diaaqassem.com:3000/api/auth/logIn?lang=ar",
         {
           method: "POST",
           headers: {
@@ -25,12 +27,11 @@ const Login = ({ onLogin }) => {
 
       if (response.ok) {
         const data = await response.json();
-        const userId = data._id || data.userId; 
+        const userId = data._id || data.userId;
         // alert(`Login successful! Your User ID is: ${userId}`);
-        alert(
-          `تم تسجيل الدخول , ودا رقمك اللي هتتعمل به انسخه واحفظه عندك: ${userId}`
-        );
-        onLogin(data); 
+        alert(`تم تسجيل الدخول , ودا رقمك اللي هتتعامل به : ${userId} مش مهم تحفظ الرقم المهم وجودك`);
+        sessionStorage.setItem("idUser", userId);
+        onLogin(data);
       } else {
         const errorData = await response.json();
         alert(errorData.message || "Invalid email or password!");
@@ -45,10 +46,6 @@ const Login = ({ onLogin }) => {
     <div className="login-section">
       <div className="login-page">
         <form onSubmit={handleLogin} className="login-form">
-          {/* <h1>Login</h1> */}
-          {/* <img src="./img/Animation.gif" alt="Animation" class="login-img" />
-           */}
-
           <DotLottieReact
             src="https://lottie.host/a1f8d7af-1847-4d9a-8af7-24cb39d9fbdf/JgD08LcVoK.json"
             loop
@@ -69,20 +66,6 @@ const Login = ({ onLogin }) => {
             onChange={(e) => setPassword(e.target.value)}
             className="input-field-login"
           />
-          {/* <div class="password-field">
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              id="password"
-              
-            />
-            <span id="toggle-password" class="toggle-icon">
-              👁️
-            </span>
-          </div> */}
-
           <button type="submit" className="btn login-btn">
             Login
           </button>

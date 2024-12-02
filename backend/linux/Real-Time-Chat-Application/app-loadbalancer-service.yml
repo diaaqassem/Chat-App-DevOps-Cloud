@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: chat-app-service-loadbalancer
+spec:
+  type: LoadBalancer
+  selector:
+    app: chat-app
+  ports:
+  - name: app
+    port: 3000
+    targetPort: 5000
+  - name: gateway
+    port: 3001
+    targetPort: 5001
+

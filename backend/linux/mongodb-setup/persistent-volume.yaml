@@ -11,5 +11,5 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: local-storage
   hostPath:
-    path: /lv01-asfour/backend-chatapp/mongodb-setup/mongo-data
+    path: /chatapp-asfour/backend/linux/mongodb-setup/mongo-data
 
